@@ -1,0 +1,39 @@
+server:
+  port: 9003
+
+spring:
+  application:
+    name: dispatcher-service
+
+  cloud:
+    function:
+      definition: pack|label # 스프링 클라우드 함수가 해당 함수를 관리하고 순서대로 합성되는 기능을 제공한다.
+    stream:
+      bindings:
+        packlabel-in-0: # 입력 바인딩
+          destination: order-accepted # 연결 대상 브로커 이름 (익스체인지)
+          group: ${spring.application.name} # 대상에 관심을 갖는 소비자 그룹의 이름을 갖는 큐와 바인딩
+        packlabel-out-0:
+          destination: order-dispatched
+
+    config:
+      uri: "http://localhost:8888"
+      request-connect-timeout: 5000
+      request-read-timeout: 5000
+      fail-fast: false # 재시도 작동
+      retry:
+        max-attempts: 6 # 최대 시도수
+        initial-interval: 1000 # 최초 재시도 지연 시간 (밀리초)
+        max-interval: 2000 # 재시도 지연 최대 시간
+        multiplier: 1.1 # 지연 시간 계산 승수
+
+  config:
+    import: "optional:configserver:"
+
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: hoonseung
+    password: seunghoon
+    connection-timeout: 5s
