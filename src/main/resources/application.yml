@@ -28,7 +28,7 @@ spring:
         multiplier: 1.1 # 지연 시간 계산 승수
 
   config:
-    import: "optional:configserver:"
+    import: "" #"optional:configserver:"
 
 
   rabbitmq:
@@ -37,3 +37,19 @@ spring:
     username: hoonseung
     password: seunghoon
     connection-timeout: 5s
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      probes:
+        enabled: true
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"

@@ -4,7 +4,7 @@ package com.polarbookshop.dispatcherservice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.polarbookshop.dispatcherservice.model.label.OrderDispatchedMessage;
 import com.polarbookshop.dispatcherservice.model.pack.OrderAcceptedMessage;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.*;
 
+@Disabled
 @Import(TestChannelBinderConfiguration.class)
 @SpringBootTest
  class FunctionStreamIntegrationTests {

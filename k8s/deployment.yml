@@ -14,10 +14,26 @@ spec:
       name: dispatcher-service
       labels:
         app: dispatcher-service
+      annotations:
+        prometheus.io/scrape: "true" # 프로메테우스에게 이 파드에 있는 컨터에너로부터 데이터를 가져와야함을 알린다
+        prometheus.io/path: /actuator/prometheus # 프로메테우스 메트릭을 제공하는 http 엔드포인트 지정
+        prometheus.io/port: "9003" # 메트릭 엔드포인트 포트
     spec:
       containers:
         - name: dispatcher-service
           image: dispatcher-service
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 9003
+            initialDelaySeconds: 13
+            periodSeconds: 5
+          readinessProbe:
+              httpGet:
+                path: /actuator/health/readiness
+                port: 9003
+              initialDelaySeconds: 8
+              periodSeconds: 15
           lifecycle:
             preStop:
               exec:
@@ -26,9 +42,12 @@ spec:
           ports:
             - containerPort: 9003
               protocol: TCP
-          env:
-            - name: SPRING_CLOUD_CONFIG_URL
-              value: http://config-service
-            - name: SPRING_RABBITMQ_HOST
-              value: polar-rabbitmq
+          volumeMounts:
+            - mountPath: /workspace/config
+              name: dispatcher-config-volume
+      volumes:
+        - name: dispatcher-config-volume
+          configMap:
+            name: dispatcher-config
+
       

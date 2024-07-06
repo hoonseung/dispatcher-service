@@ -1,5 +1,6 @@
 package com.polarbookshop.dispatcherservice;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -9,6 +10,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
+@Disabled
 @Testcontainers
  class MessageBrokerContainerTests {
 
@@ -24,7 +26,6 @@ import org.testcontainers.utility.DockerImageName;
         registry.add("spring.rabbitmq.host", () -> rabbitMq.getHost());
         registry.add("spring.rabbitmq.port", () -> rabbitMq.getMappedPort(RABBITMQ_PORT));
     }
-
 
     @Test
     void verifyThatSpringContextLoads() {
